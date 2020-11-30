@@ -103,6 +103,21 @@ export class Deployer extends GCXClient {
     this._auth = new GoogleAuth(options);
   }
 
+  async undeploy() {
+    this.emit(ProgressEvent.STARTING, {});
+    const gcf = await this._getGCFClient();
+    const projectId = await this._auth.getProjectId();
+    const region = this._options.region || 'us-central1';
+    const parent = `projects/${projectId}/locations/${region}`;
+    const name = `${parent}/functions/${this._options.name}`;
+    const fns = gcf.projects.locations.functions;
+    let result: GaxiosResponse<cloudfunctions_v1.Schema$Operation>;
+    result = await fns.delete({name: name});
+
+    const operation = result.data;
+    await this._poll(operation.name!);
+    this.emit(ProgressEvent.COMPLETE);
+  }
   /**
    * Deploy the current application using the given opts.
    */
