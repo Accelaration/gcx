@@ -95,6 +95,7 @@ export class Deployer extends GCXClient {
       options.projectId = options.project;
     }
     this._options = options;
+    
     if (!options.targetDir && !options.sourceRepository) {
       this._options.targetDir = process.cwd();
     }
@@ -218,7 +219,7 @@ export class Deployer extends GCXClient {
       requestBody = {
         name: `${parent}/functions/${this._options.name}`,
         description: this._options.description,
-        sourceUploadUrl, sourceRepository,
+        sourceUploadUrl,
         entryPoint: this._options.entryPoint,
         network: this._options.network,
         runtime: this._options.runtime || 'nodejs8',
