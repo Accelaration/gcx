@@ -190,6 +190,7 @@ export class Deployer extends GCXClient {
   _getUpdateMask() {
     const opts = this._options;
     const fields = opts.sourceRepository ? ['sourceRepository'] : ['sourceUploadUrl'];
+    if (opts.environmentVariables) fields.push('environmentVariables');
     if (opts.memory) fields.push('availableMemoryMb');
     if (opts.description) fields.push('description');
     if (opts.entryPoint) fields.push('entryPoint');
